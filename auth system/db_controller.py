@@ -5,10 +5,21 @@
 """
 import os.path
 import sqlite3
+from typing import NoReturn
+
+
+# список того, что нужно доделать в этом модуле:
+# TODO 1: написать функцию обновления таблицы, которая будет убирать перенос
+#         строк ('username\n', 'password\n') -> ('username', 'password').
 
 
 # как будет возвращен пользователь при запросе в бд.
 User = (str, str)
+
+
+class WrongDataBaseNameException(Exception):
+    """ Класс-исключение для отлова ошибки о неправильном введенном названии БД """
+    pass
 
 
 def connect_to_database(database_name: str, path: str = '') -> sqlite3.Connection:
@@ -32,8 +43,29 @@ def connect_to_database(database_name: str, path: str = '') -> sqlite3.Connectio
         connection.close()
 
 
+def create_users_table(connection: sqlite3.Connection) -> NoReturn:
+    """ Функция создания таблицы в базе данных
+
+    аргументы:
+    connection -- соединение с базой данных
+    """
+    try:
+        if connection is None:
+            raise WrongDataBaseNameException('Неправильное название базы данных. Введите существующую')
+        cursor = connection.cursor()
+        cursor.execute(f"""CREATE TABLE IF NOT EXISTS "users"(
+                               "username" TEXT NOT NULL UNIQUE,
+                               "password" TEXT NOT NULL UNIQUE,
+                               PRIMARY KEY("password"));""")
+        connection.commit()
+    except sqlite3.Error as e:
+        print(e)
+    finally:
+        connection.close()
+
+
 def add_user_to_table(connection: sqlite3.Connection,
-                      data: tuple) -> None:
+                      data: tuple) -> NoReturn:
     """ Функция добавления информации в имеющуюся таблицу в базе данных
 
     аргументы:
@@ -42,7 +74,7 @@ def add_user_to_table(connection: sqlite3.Connection,
     """
     try:
         if connection is None:
-            raise WrongDataBaseNameException('Неправильное название базы данных. Введите существующую')
+            raise WrongDataBaseNameException('Неправильное название базы данных.')
         cursor = connection.cursor()
         cursor.execute("""INSERT INTO users VALUES (?, ?)""", data)
         connection.commit()
@@ -50,18 +82,6 @@ def add_user_to_table(connection: sqlite3.Connection,
         print(e)
     finally:
         connection.close()
-
-
-def delete_info_in_table(connection: sqlite3.Connection,
-                         table_name: str, username: int) -> None:
-    """ Функция удаляет запись в таблице по её id
-
-    аргументы:
-    connection -- соединение с базой данных
-    table_name -- название таблицы
-    username -- имя пользователя
-    """
-    pass
 
 
 def user_from_table(connection: sqlite3.Connection,
@@ -73,11 +93,13 @@ def user_from_table(connection: sqlite3.Connection,
     connection -- соединение с базой данных
     username -- имя пользователя
     """
-    username += '\n'
     try:
         if connection is None:
-            raise WrongDataBaseNameException('Неправильное название базы данных. Введите существующую')
+            raise WrongDataBaseNameException('Неправильное название базы данных.')
         cursor = connection.cursor()
+        cursor.execute("""SELECT username FROM users WHERE username = ?""", (username,))
+        if cursor.fetchall() is None:
+            username += '\n'
         cursor.execute("""SELECT username, password FROM users
                           WHERE username = ?""", (username,))
         data = cursor.fetchall()[0]
@@ -86,12 +108,12 @@ def user_from_table(connection: sqlite3.Connection,
         else:
             normalized_user = data
         return normalized_user
-    except sqlite3.Error as e:
+    except (sqlite3.Error, IndexError) as e:
         print(e)
     finally:
         connection.close()
 
 
 if __name__ == "__main__":
-    b = ('asgasg', 'sagasg')
-    add_user_to_table(connect_to_database('users.db'), b)
+    a=user_from_table(connect_to_database('users.db'), 'asgasg')
+    print(a)
