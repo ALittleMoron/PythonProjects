@@ -1,4 +1,5 @@
 env/
 __pycache__/
 users.db-journal
+users.db
 test.py
