@@ -3,6 +3,7 @@
 будет использоваться для паролей и имён пользователей
 """
 from hashlib import sha1
+from db_controller import connect_to_database, user_from_table
 import re
 
 
@@ -39,6 +40,19 @@ def usernameIsStrong(username: str) -> bool:
             return False
         return True
 
+
+def isValid(username: str, hashed_password: str) -> bool:
+    """ Возвращает True, если логин и хешированный пароль совпадают
+    с данными в базе, иначе False.
+
+    аргументы:
+    username -- имя пользователя из формы
+    hashed_password -- хешированный пароль из формы
+    """
+    db_username, db_password = user_from_table(connect_to_database('users.db'),
+                                               username=username)
+    return username == db_username and hashed_password == db_password
+
+
 if __name__ == "__main__":
-    print(passwordIsStrong('Aagsagasg1!'))
-    print(usernameIsStrong('Sasg'))
+    print(isValid('ALittleMoron', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8'))
