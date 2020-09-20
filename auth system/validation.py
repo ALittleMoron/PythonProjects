@@ -41,6 +41,19 @@ def usernameIsStrong(username: str) -> bool:
         return True
 
 
+def usernameInDatabase(username: str) -> bool:
+    """ Возвращает True, если такой логин есть в базе данных, иначе возвращает False.
+
+    аргумент username -- имя пользователя для проверки
+    """
+    try:
+        db_username, _ = user_from_table(connect_to_database('users.db'),
+                                                   username=username)
+        return True
+    except TypeError:
+        return False
+
+
 def isValid(username: str, hashed_password: str) -> bool:
     """ Возвращает True, если логин и хешированный пароль совпадают
     с данными в базе, иначе False.
@@ -49,10 +62,12 @@ def isValid(username: str, hashed_password: str) -> bool:
     username -- имя пользователя из формы
     hashed_password -- хешированный пароль из формы
     """
-    db_username, db_password = user_from_table(connect_to_database('users.db'),
-                                               username=username)
-    return username == db_username and hashed_password == db_password
-
+    try:
+        db_username, db_password = user_from_table(connect_to_database('users.db'),
+                                                   username=username)
+        return username == db_username and hashed_password == db_password
+    except (TypeError, IndexError):
+        return False
 
 if __name__ == "__main__":
     print(isValid('ALittleMoron', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8'))
