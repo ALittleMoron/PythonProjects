@@ -2,9 +2,9 @@
 модуль проверки введенных данных на правильность.
 будет использоваться для паролей и имён пользователей
 """
-from hashlib import sha1
-from db_controller import connect_to_database, user_from_table
 import re
+
+from db_controller import connect_to_database, user_from_table
 
 
 def passwordIsStrong(password: str) -> bool:
@@ -65,9 +65,10 @@ def isValid(username: str, hashed_password: str) -> bool:
     try:
         db_username, db_password = user_from_table(connect_to_database('users.db'),
                                                    username=username)
+        print(db_password, hashed_password)
         return username == db_username and hashed_password == db_password
     except (TypeError, IndexError):
         return False
 
 if __name__ == "__main__":
-    print(isValid('ALittleMoron', '5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8'))
+    print(isValid('ALittleMoron', '35e62fd8f5625ff163456069159feb635d7063c9'))

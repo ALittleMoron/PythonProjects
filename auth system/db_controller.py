@@ -22,7 +22,7 @@ class WrongDataBaseNameException(Exception):
     pass
 
 
-def connect_to_database(database_name: str, path: str = '') -> sqlite3.Connection:
+def connect_to_database(database_name: str) -> sqlite3.Connection:
     """ Функция подключения к базе данных. Возвращает соединение на уже
     существующую базу данных (Не хочу случайно создать лишнюю БД).
 
@@ -32,12 +32,10 @@ def connect_to_database(database_name: str, path: str = '') -> sqlite3.Connectio
     если база данных находится рядом с python файлом.
     """
     try:
-        database = os.path.join(path, database_name)
-        if os.path.isfile(database) and ('.db' in database or '.sqlite' in database):
-            connection = sqlite3.connect(database, timeout=5)
-            return connection
-        else:
-            return None
+        BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+        db_path = os.path.join(BASE_DIR, database_name)
+        connection = sqlite3.connect(db_path)
+        return connection
     except sqlite3.Error as e:
         print(e)
         connection.close()
@@ -99,21 +97,22 @@ def user_from_table(connection: sqlite3.Connection,
         cursor = connection.cursor()
         cursor.execute("""SELECT username FROM users WHERE username = ?""", (username,))
         if cursor.fetchall() is None:
-            username += '\n'
-        cursor.execute("""SELECT username, password FROM users
+            return None
+        cursor.execute("""SELECT username, password FROM "users"
                           WHERE username = ?""", (username,))
-        data = cursor.fetchall()[0]
-        if '\n' in data[0] and '\n' in data[1]:
-            normalized_user = tuple([user[:-1] for user in data])
-        else:
-            normalized_user = data
-        return normalized_user
-    except (sqlite3.Error, IndexError) as e:
+        try:
+            data = cursor.fetchall()[0]
+        except IndexError as e:
+            print(e)
+            return None
+        return data
+
+    except sqlite3.Error as e:
         print(e)
     finally:
         connection.close()
 
 
 if __name__ == "__main__":
-    a=user_from_table(connect_to_database('users.db'), 'asgasg')
+    a=user_from_table(connect_to_database('users.db'), 'ALittleMoron')
     print(a)
