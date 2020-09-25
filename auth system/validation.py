@@ -65,7 +65,6 @@ def isValid(username: str, hashed_password: str) -> bool:
     try:
         db_username, db_password = user_from_table(connect_to_database('users.db'),
                                                    username=username)
-        print(db_password, hashed_password)
         return username == db_username and hashed_password == db_password
     except (TypeError, IndexError):
         return False

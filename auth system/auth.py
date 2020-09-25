@@ -12,9 +12,12 @@ from validation import isValid, passwordIsStrong, usernameIsStrong
 # BUG: check_for_data_correct не проходит проверку. (FIXED)
 
 
+SALT = 'Salt for more secured data ' # используй совместно с паролем (SALT + password)
+
+
 def check_for_data_correct(data: tuple):
     username, password, form = data
-    hashed_password = sha1(bytes(password, encoding = 'utf-8')).hexdigest()
+    hashed_password = sha1(bytes(SALT+password, encoding = 'utf-8')).hexdigest()
     if form and username and password:
         if form == 'login':
             if isValid(username, hashed_password):
