@@ -12,10 +12,6 @@ from validation import isValid, passwordIsStrong, usernameIsStrong
 # BUG: check_for_data_correct не проходит проверку. (FIXED)
 
 
-def register(register_data: tuple) -> NoReturn:
-    add_user_to_table(connect_to_database('users.db'), register_data)
-
-
 def check_for_data_correct(data: tuple):
     username, password, form = data
     hashed_password = sha1(bytes(password, encoding = 'utf-8')).hexdigest()
@@ -34,7 +30,7 @@ def check_for_data_correct(data: tuple):
                 return False
             
             register_data = username, hashed_password
-            register(register_data)
+            add_user_to_table(connect_to_database('users.db'), register_data)
             return True
     else:
         return False

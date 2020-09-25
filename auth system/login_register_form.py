@@ -13,13 +13,13 @@ def choose_menu() -> Input:
     print('Что вы хотите сделать?', '1. Войти в систему',
           '2. Зарегистрироваться', sep = '\n')
     choice = input('Ответ [1/2]: ')
-    if choice is '1':
+    if choice == '1':
         return input_print('login')
-    elif choice is '2':
+    elif choice == '2':
         return input_print('register')
     else:
         print('Что-то пошло не так. Попробуйте ещё раз!\n')
-        return None
+        quit()
 
 
 def input_print(form: str) -> (Username, Password):
