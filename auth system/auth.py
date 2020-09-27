@@ -43,14 +43,14 @@ def main() -> bool:
     data = choose_menu()
     if check_for_data_correct(data):
         print('Класс, вы это сделали!')
-        return None
+        return True
     else:
         print('Либо логин, либо пароля не правильный... Попробуй ещё раз\n\n')
-        return True
+        return False
 
 
 if __name__ == "__main__":
     while True:
         a = main()
-        if a is None:
+        if not a:
             break
