@@ -2,4 +2,4 @@ testVenv/
 testProject/news/__pycache__/
 testProject/news/migrations/__pycache__/
 testProject/testProject/__pycache__/
-testProject/testProject/db.sqlite3
+testProject/db.sqlite3
