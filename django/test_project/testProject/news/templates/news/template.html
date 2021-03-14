@@ -28,21 +28,9 @@
     <div class="container mt-3">
         <h1>{{ title }}</h1>
         <div class="row">
-            <div class="col-md-12">
-            {% for item in news %}
-            {% if item.is_published %}
-            <div class="card mb-3">
-                <div class="card-header">
-                  <p>Категория: {{ item.category }}</p>
-                </div>
-                <div class="card-body">
-                  <h5 class="card-title">{{ item.title }}</h5>
-                  <p class="card-text">{{ item.content }}</p>
-                  <a href="#" class="btn btn-primary">Читать дальше</a>
-                </div>
-              </div>
-            {% endif %}
-            {% endfor %}
+            {% block content %}
+            
+            {% endblock %}
             </div>
         </div>
     </div>
