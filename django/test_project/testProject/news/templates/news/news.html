@@ -21,7 +21,7 @@
                   <h4 class="card-title">{{ item.title }}</h4>
                   <p class="card-text">{{ item.content|truncatewords:50 }}</p>
                   <p>Написано {{ item.created_at|date:"d M Y, D " }}</p>
-                  <a href="#" class="btn btn-primary">Читать дальше</a>
+                  <a href="{% url 'article' item.pk %}" class="btn btn-primary">Читать дальше</a>
               </div>
             {% endif %}
             {% empty %}
