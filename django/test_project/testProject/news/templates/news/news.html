@@ -1,8 +1,16 @@
 {% extends "news/template.html" %}
 {% load static %}
 
+{% block category %}
+            <div class="list-group">
+                <a href="{% url 'index' %}" class="list-group-item list-group-item-action">Все</a>
+                {% for item_category in categories %}
+                    <a href="{% url 'category' item_category.pk %}" class="list-group-item list-group-item-action">{{ item_category.title }}</a>
+                {% endfor%}
+            </div>
+{% endblock %}
+
 {% block content %}
-            <div class="col-md-12">
             {% for item in news %}
             {% if item.is_published %}
             <div class="card mb-3">
@@ -11,11 +19,13 @@
                 </div>
                 <div class="card-body">
                   <h4 class="card-title">{{ item.title }}</h4>
-                  <p class="card-text">{{ item.content }}</p>
+                  <p class="card-text">{{ item.content|truncatewords:50 }}</p>
                   <p>Написано {{ item.created_at|date:"d M Y, D " }}</p>
                   <a href="#" class="btn btn-primary">Читать дальше</a>
-                </div>
               </div>
             {% endif %}
+            {% empty %}
+                <h4>Приносим свои извинения за приичиненные неудобства!</h4>
+                <p>В данный момент на этом разделе сайта нет новостей. Возможно, они появятся в будущем.</p>
             {% endfor %}
 {% endblock %}
