@@ -20,3 +20,11 @@ def get_category(request, category_id):
         'categories': Category.objects.all(),
     }
     return render(request, 'news/news.html', content)
+
+
+def get_article(request, article_id):
+    content = {
+        'title': 'Новость на сайте',
+        'article': Article.objects.get(id=article_id),
+    }
+    return render(request, 'news/article.html', content)
