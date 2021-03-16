@@ -2,15 +2,20 @@
 {% load static %}
 
 
-{% block article%}
-            <div class="card mb-3">
-                <div class="card-header">
-                  <p>Категория: {{ article.category }}   </p>
-                </div>
-                <div class="card-body">
-                  <h4 class="card-title">{{ article.title }}</h4>
-                  <p class="card-text">{{ article.content|linebreaks }}</p>
-                  <p>Написано {{ article.created_at|date:"d M Y, D " }}</p>
-                  <a href="{% url 'index' %}" class="btn btn-primary">Вернуться ко всем новостям</a>
-              </div>
+{% block main %}
+            <div class="container">
+                <h1>{{title}}</h1>
+                <div class="row">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <p>Категория: {{ article.category }}   </p>
+                        </div>
+                        <div class="card-body">
+                            <h4 class="card-title">{{ article.title }}</h4>
+                            <p class="card-text">{{ article.content|linebreaks }}</p>
+                            <p>Написано {{ article.created_at|date:"d M Y, D " }}</p>
+                            <a href="{% url 'index' %}" class="btn btn-primary">Вернуться ко всем новостям</a>
+                        </div>
+                    </div>
+            </div>
 {% endblock %}
