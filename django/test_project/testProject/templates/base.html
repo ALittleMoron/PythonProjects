@@ -9,7 +9,7 @@
       integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl"
       crossorigin="anonymous"
     />
-    <title>{{ title }}</title>
+    <title>{% block title %} {{ title }} {% endblock title %}</title>
   </head>
   <body>
     
