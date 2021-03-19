@@ -3,3 +3,4 @@ testProject/news/__pycache__/
 testProject/news/migrations/__pycache__/
 testProject/testProject/__pycache__/
 testProject/db.sqlite3
+testProject/templatetags/__pycache__/
