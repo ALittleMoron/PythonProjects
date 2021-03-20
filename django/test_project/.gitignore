@@ -5,3 +5,5 @@ testProject/testProject/__pycache__/
 testProject/db.sqlite3
 testProject/templatetags/__pycache__/
 testProject/news/templatetags/__pycache__/
+testProject/static/
+testProject/testProject/static/
