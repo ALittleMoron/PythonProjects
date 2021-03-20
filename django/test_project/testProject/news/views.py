@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 
 from .models import Article, Category
 
@@ -22,7 +22,6 @@ def get_news_by_category(request, category_id):
 
 def get_article(request, article_id):
     content = {
-        'title': 'Новость на сайте',
-        'article': Article.objects.get(id=article_id),
+        'article': get_object_or_404(Article, pk=article_id),
     }
     return render(request, 'news/article.html', content)

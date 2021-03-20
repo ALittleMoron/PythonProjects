@@ -15,13 +15,13 @@
                         {% if item.is_published %}
                             <div class="card mb-3">
                                 <div class="card-header">
-                                    <p>Категория: {{ item.category }}   </p>
+                                    <p>Категория: <a href='{{ item.category.get_absolute_url }}'>{{ item.category }}</a></p>
                                 </div>
                                 <div class="card-body">
                                     <h4 class="card-title">{{ item.title }}</h4>
                                     <p class="card-text">{{ item.content|truncatewords:50 }}</p>
                                     <p>Написано {{ item.created_at|date:"d M Y, D " }}</p>
-                                    <a href="{% url 'article' item.pk %}" class="btn btn-primary">Читать дальше</a>
+                                    <a href="{{ item.get_absolute_url }}" class="btn btn-primary">Читать дальше</a>
                                 </div>
                             </div>
                         {% endif %}
