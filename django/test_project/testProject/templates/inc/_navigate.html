@@ -3,7 +3,7 @@
     >
       <p class="h5 my-0 me-md-auto fw-normal">Новости из моей головы</p>
       <nav class="my-2 my-md-0 me-md-3">
-        <a class="btn btn-outline-primary" href="#">Написать новость</a>
+        <a class="btn btn-outline-primary" href="{% url "add_article" %}">Написать новость</a>
       </nav>
       {% if user.is_authenticated %}
       <a class="btn btn-outline-primary" href="#">Войти/Зарегистрироваться</a>

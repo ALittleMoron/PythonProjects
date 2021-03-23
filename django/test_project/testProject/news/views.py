@@ -1,7 +1,8 @@
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404, get_list_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 from .models import Article, Category
+from .forms import ArticleForm
 
 
 def index(request):
@@ -25,3 +26,15 @@ def get_article(request, article_id):
         'article': get_object_or_404(Article, pk=article_id),
     }
     return render(request, 'news/article.html', content)
+
+
+def add_article(request):
+    if request.method == 'POST':
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            article = form.save()
+            return redirect(article)
+
+    else:
+        form = ArticleForm()
+    return render(request, 'news/add_article.html', {'form': form})
