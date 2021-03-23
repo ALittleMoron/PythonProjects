@@ -1,40 +1,44 @@
 from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render
+from django.views.generic import ListView, DetailView, CreateView
 
 from .models import Article, Category
 from .forms import ArticleForm
 
 
-def index(request):
-    content = {
-        'title': 'Все новости',
-        'news': Article.objects.all(),
-    }
-    return render(request, 'news/news.html', content)
+class HomeView(ListView):
+    model = Article
+    template_name = 'news/news.html'
+    context_object_name = 'news'
 
 
-def get_news_by_category(request, category_id):
-    content = {
-        'title': Category.objects.get(id=category_id),
-        'news': Article.objects.filter(category_id=category_id, is_published=True),
-    }
-    return render(request, 'news/news.html', content)
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Все новости'
+        return context
+
+    
+    def get_queryset(self):
+        return Article.objects.filter(is_published=True)
 
 
-def get_article(request, article_id):
-    content = {
-        'article': get_object_or_404(Article, pk=article_id),
-    }
-    return render(request, 'news/article.html', content)
+class NewsByCategoryView(HomeView):
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = Category.objects.get(id=self.kwargs['category_id'])
+        return context
 
 
-def add_article(request):
-    if request.method == 'POST':
-        form = ArticleForm(request.POST)
-        if form.is_valid():
-            article = form.save()
-            return redirect(article)
+    def get_queryset(self):
+        return Article.objects.filter(category_id = self.kwargs['category_id'], is_published=True)
 
-    else:
-        form = ArticleForm()
-    return render(request, 'news/add_article.html', {'form': form})
+
+class GetArticleView(DetailView):
+    model = Article
+    template_name = 'news/article.html'
+    pk_url_kwarg = 'article_id'
+
+
+class AddArticleView(CreateView):
+    form_class = ArticleForm
+    template_name = 'news/add_article.html'
