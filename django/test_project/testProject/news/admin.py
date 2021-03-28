@@ -19,3 +19,4 @@ class CategoryAdmin(admin.ModelAdmin):
 
 admin.site.register(Article, ArticleAdmin)
 admin.site.register(Category, CategoryAdmin)
+admin.site.site_header = "Админ-панель новостей сайта"
