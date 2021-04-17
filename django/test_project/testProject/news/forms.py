@@ -19,18 +19,18 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 class CustomUserCreationForm(UserCreationForm):
     username = forms.CharField(
-        label='Имя пользователя', 
+        label='Имя пользователя',
         help_text="Обязательное поле. Не более 150 символов. Только буквы, цифры и символы @/./+/-/_.",
         widget=forms.TextInput(attrs={"class": 'form-control'}))
     email = forms.EmailField(
-        label='E-mail',  
+        label='E-mail',
         widget=forms.EmailInput(attrs={"class": 'form-control'}))
     password1 = forms.CharField(
-        label='Пароль', 
+        label='Пароль',
         help_text="Пароль должен быть нераспространенным, не состоять только из цифр, состоять более чем из 8 символов.",
         widget=forms.PasswordInput(attrs={"class": 'form-control'}))
     password2 = forms.CharField(
-        label='Подтверждение пароля', 
+        label='Подтверждение пароля',
         help_text="Пароли должны совпадать.",
         widget=forms.PasswordInput(attrs={"class": 'form-control'}))
 

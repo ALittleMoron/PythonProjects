@@ -9,7 +9,6 @@ from .models import Article, Category
 from .forms import ArticleForm, CustomUserCreationForm, CustomAuthenticationForm
 
 
-
 def user_register(request):
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
@@ -31,7 +30,7 @@ def user_login(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            messages.success(request,'Вы вошли в систему')
+            messages.success(request, 'Вы вошли в систему')
             return redirect('index')
         else:
             messages.error(request, 'Ошибка входа')
@@ -50,13 +49,11 @@ class HomeView(ListView):
     template_name = 'news/news.html'
     context_object_name = 'news'
 
-
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Все новости'
         return context
 
-    
     def get_queryset(self):
         return Article.objects.filter(is_published=True).select_related('category')
 
@@ -67,9 +64,8 @@ class NewsByCategoryView(HomeView):
         context['title'] = Category.objects.get(id=self.kwargs['category_id'])
         return context
 
-
     def get_queryset(self):
-        return Article.objects.filter(category_id = self.kwargs['category_id'], is_published=True).select_related('category')
+        return Article.objects.filter(category_id=self.kwargs['category_id'], is_published=True).select_related('category')
 
 
 class GetArticleView(DetailView):
